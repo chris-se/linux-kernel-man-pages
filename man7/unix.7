@@ -237,6 +237,38 @@ ancillary message.
 When this option is set and the socket is not yet connected
 a unique name in the abstract namespace will be generated automatically.
 Expects an integer boolean flag.
+.TP
+.BR SO_MAX_DGRAM_QLEN " (since Linux 4.1)"
+Specifies the maximum number of datagrams that can be queued in a
+socket of type
+.BR SOCK_DGRAM .
+Upon creation of the socket, this is initialized with the value of
+.IR /proc/sys/net/unix/max_dgram_qlen .
+Note that the value specified here may not be larger than
+.IR /proc/sys/net/unix/max_dgram_qlen_limit ;
+if a larger value is specified, it will automatically be truncated.
+
+This option has to be set for the socket
+.I receiving
+the datagrams to have an effect.
+.TP
+.BR SO_MAX_DGRAM_QLEN_FORCE " (since Linux 4.1)"
+Using this socket option, a privileged
+.RB ( CAP_NET_ADMIN )
+process can perform the same task as
+.BR SO_MAX_DGRAM_QLEN ,
+but the
+.I max_dgram_qlen_limit
+limit can be overridden.
+
+Regardless of privileges, any value that does not fit into an
+.B "unsigned short"
+will not be accepted. (Note that the value parameter for
+.BR setsockopt (2)
+and
+.BR getsockopt (2)
+is still of type
+.BR int .)
 .SS Autobind feature
 If a
 .BR bind (2)
